@@ -35,36 +35,35 @@ def createEmptyBST ():
     # This function creates an empty BST, with root pointing to null initially, and returns this instance of BST class.
     return BST()
 
-def insert (bst, node, success=True):
-    if bst.root == None:
-        bst.root = node
-        return bst, success
+def insert (node, key_node, success=True):
+    if node == None:
+        return key_node, success
 
-    if bst.root.item.price == node.item.price:
+    if node.item.price == key_node.item.price:
         print("Duplicate")
-        return bst, False
-    elif bst.root.item.price < node.item.price:
+        return node, False
+    elif node.item.price < key_node.item.price:
         # If phone's price is less than current nodes price: Insert the node at right subtree
-        if bst.root.right == None:
-            bst.root.right = node
+        if node.right == None:
+            node.right = key_node
         else:
-            bst.root.right, success = insert(bst.root.right, node, success)
+            node.right, success = insert(node.right, key_node, success)
     else:
         # If phone's price is less than current nodes price: Insert the node at left subtree
-        if bst.root.left == None:
-            bst.root.left = node
+        if node.left == None:
+            node.left = key_node
         else:
-            bst.root.left, success = insert(bst.root.left, node, success)
+            node.left, success = insert(node.left, key_node, success)
 
-    return bst, success
+    return node, success
 
 def insertIntoBST (bst, phone):
     # This function inserts a phone record (as per the price of {phone} variable) at the appropriate position in the BST {bst}, and then returns the same BST (not a copy).
 
-    node = Node()
-    node.item = phone
+    key_node = Node()
+    key_node.item = phone
 
-    bst, success = insert(bst, node)
+    bst.root, success = insert(bst.root, key_node)
 
     if success:
         bst.no_of_phones += 1
