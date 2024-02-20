@@ -17,6 +17,11 @@ class Phone:
         self.price = 0 # price
         self.quantity = 0 # Quantity in stock
 
+    def __init__(self, name, price, quantity) -> None:
+        self.name = name # type of phone
+        self.price = price # price
+        self.quantity = quantity # Quantity in stock
+
     def __str__(self) -> str:
         return f'Phone name : {self.name}, Price : {self.price}, Quantity left in stock : {self.quantity}'
 
@@ -119,12 +124,6 @@ def get_input_from_user():
     option = int(input("Enter your choice: "))
     return option
 
-def input_node_from_user():
-    phone = Phone()
-    phone.name = input("Enter your name: ")
-    phone.price = int(input("Enter your price: "))
-    phone.quantity = int(input("Enter your quantity: "))
-    return phone
 
 def command_prompt():
     # Get the choice from user
@@ -145,10 +144,12 @@ def command_prompt():
             #     Apple Iphone 14, 65999, 50
             pass
         elif option == Input.COMMAND_INPUT.value:
-            phone = input_node_from_user()
-            bst = insertIntoBST(bst, phone)
-            print("Print in call")
-            print(bst)
+            no_of_entries = int(input("Enter the number of entries: "))
+            print("Enter the details is below format:\n<PHONE_NAME>, <PRICE>, <QUANTITY>")
+            for _ in range(no_of_entries):
+                item = input("Enter the phone details: ").split(', ')
+                phone = Phone(item[0], int(item[1]), int(item[2]))
+                bst = insertIntoBST(bst, phone)
         elif option == Input.EXIT.value:
             return
 
