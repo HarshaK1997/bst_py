@@ -76,7 +76,31 @@ def insertIntoBST (bst, phone):
 
 def findInBST (bst, cost): 
     # This function finds whether there exists a Phone of price {cost}, and if there does, return that Phone variable, if not, return null.
-    pass
+
+    def search(node, key):
+        # If node == None, key is not present in BST
+        if node is None:
+            return None
+
+        # Key found
+        if node.item.price == key:
+            return node.item
+
+        # If key not found, traverse left/right
+        if node.item.price < key:
+            # Key is greater than node's key: search right subtree
+            if node.right == None:
+                return None
+            else:
+                return search(node.right, key)
+        else:
+            # Key is lesser than node's key: search left subtree
+            if node.left == None:
+                return None
+            else:
+                return search(node.left, key)
+
+    return search(bst.root, cost)
 
 def findMaxPrice (bst):
     # This function returns the Phone with maximum price amongst all phones available in the store.
@@ -111,6 +135,7 @@ def totalBooks (bst) :
 class Input(Enum):
     FILE_INPUT = 1
     COMMAND_INPUT = 2
+    SEARCH_COST = 3
     EXIT = 6
 
 
@@ -152,6 +177,10 @@ def command_prompt():
                 item = input("Enter the phone details: ").split(', ')
                 phone = Phone(item[0], int(item[1]), int(item[2]))
                 bst = insertIntoBST(bst, phone)
+        elif option == Input.SEARCH_COST.value:
+            cost = int(input("Enter the phone price to search: "))
+            phone = findInBST(bst, cost)
+            print(phone)
         elif option == Input.EXIT.value:
             return
 
