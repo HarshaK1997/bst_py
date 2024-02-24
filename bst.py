@@ -137,12 +137,14 @@ def command_prompt():
         # TODO: Validate option
 
         if option == Input.FILE_INPUT.value:
-            # File input: (Input and Output file names should be taken from user)
-            #     3
-            #     Samsung Galaxy M34, 17950, 20
-            #     OnePlus Nord CE 3, 21999, 10
-            #     Apple Iphone 14, 65999, 50
-            pass
+            filename = input("Enter the name of the file: ")
+            f = open(filename, "r")
+            no_of_entries = int(f.readline().rstrip('\n'))
+            for _ in range(no_of_entries):
+                item = f.readline().rstrip('\n').split(", ")
+                phone = Phone(item[0], int(item[1]), int(item[2]))
+                bst = insertIntoBST(bst, phone)
+            f.close()
         elif option == Input.COMMAND_INPUT.value:
             no_of_entries = int(input("Enter the number of entries: "))
             print("Enter the details is below format:\n<PHONE_NAME>, <PRICE>, <QUANTITY>")
