@@ -104,11 +104,31 @@ def findInBST (bst, cost):
 
 def findMaxPrice (bst):
     # This function returns the Phone with maximum price amongst all phones available in the store.
-    pass
+
+    def search(node, key):
+        if node.right == None:
+            return node.item
+        else:
+            return search(node.right, key)
+
+    if bst.root == None:
+        return None
+
+    return search(bst.root, bst.root.item.price)
 
 def findMinPrice (bst):
     # This function returns the Phone with minimum price amongst all phones available in the store.
-    pass
+
+    def search(node, key):
+        if node.left == None:
+            return node.item
+        else:
+            return search(node.left, key)
+
+    if bst.root == None:
+        return None
+
+    return search(bst.root, bst.root.item.price)
 
 def findSecondMaxPrice (bst): #findSecondMinPrice (bst) :
     # This function returns the Phone with second highest price amongst all phones available in the store.
@@ -136,16 +156,26 @@ class Input(Enum):
     FILE_INPUT = 1
     COMMAND_INPUT = 2
     SEARCH_COST = 3
-    EXIT = 6
+    FIND_MAX = 4
+    FIND_SECOND_MAX = 5
+    FIND_MIN = 6
+    FIND_SECOND_MIN = 7
+    DELETE_RECORD = 8
+    DISPLAY = 9
+    EXIT = 10
 
 
 def get_input_from_user():
-    print("1. File Input")
-    print("2. Command line Input")
-    print("3. Search Input")
-    print("4. Delete Input")
-    print("5. Display Input")
-    print("6. Exit")
+    print(" 1. File Input")
+    print(" 2. Command line Input")
+    print(" 3. Search Cost")
+    print(" 4. Find max Price")
+    print(" 5. Find second max Price")
+    print(" 6. Find min Price")
+    print(" 7. Find second min Price")
+    print(" 8. Delete record")
+    print(" 9. Display record")
+    print("10. Exit")
     option = int(input("Enter your choice: "))
     return option
 
@@ -170,6 +200,7 @@ def command_prompt():
                 phone = Phone(item[0], int(item[1]), int(item[2]))
                 bst = insertIntoBST(bst, phone)
             f.close()
+            print("Insertion successful")
         elif option == Input.COMMAND_INPUT.value:
             no_of_entries = int(input("Enter the number of entries: "))
             print("Enter the details is below format:\n<PHONE_NAME>, <PRICE>, <QUANTITY>")
@@ -180,6 +211,12 @@ def command_prompt():
         elif option == Input.SEARCH_COST.value:
             cost = int(input("Enter the phone price to search: "))
             phone = findInBST(bst, cost)
+            print(phone)
+        elif option == Input.FIND_MAX.value:
+            phone = findMaxPrice(bst)
+            print(phone)
+        elif option == Input.FIND_MIN.value:
+            phone = findMinPrice(bst)
             print(phone)
         elif option == Input.EXIT.value:
             return
