@@ -40,30 +40,30 @@ def createEmptyBST ():
     # This function creates an empty BST, with root pointing to null initially, and returns this instance of BST class.
     return BST()
 
-def insert (node, key_node, success=True):
-    if node == None:
-        return key_node, success
-
-    if node.item.price == key_node.item.price:
-        print("Duplicate")
-        return node, False
-    elif node.item.price < key_node.item.price:
-        # If phone's price is less than current nodes price: Insert the node at right subtree
-        if node.right == None:
-            node.right = key_node
-        else:
-            node.right, success = insert(node.right, key_node, success)
-    else:
-        # If phone's price is less than current nodes price: Insert the node at left subtree
-        if node.left == None:
-            node.left = key_node
-        else:
-            node.left, success = insert(node.left, key_node, success)
-
-    return node, success
-
 def insertIntoBST (bst, phone):
     # This function inserts a phone record (as per the price of {phone} variable) at the appropriate position in the BST {bst}, and then returns the same BST (not a copy).
+
+    def insert (node, key_node, success=True):
+        if node == None:
+            return key_node, success
+
+        if node.item.price == key_node.item.price:
+            print("Duplicate")
+            return node, False
+        elif node.item.price < key_node.item.price:
+            # If phone's price is less than current nodes price: Insert the node at right subtree
+            if node.right == None:
+                node.right = key_node
+            else:
+                node.right, success = insert(node.right, key_node, success)
+        else:
+            # If phone's price is less than current nodes price: Insert the node at left subtree
+            if node.left == None:
+                node.left = key_node
+            else:
+                node.left, success = insert(node.left, key_node, success)
+
+        return node, success
 
     key_node = Node()
     key_node.item = phone
@@ -72,6 +72,7 @@ def insertIntoBST (bst, phone):
 
     if success:
         bst.no_of_phones += 1
+
     return bst
 
 def findInBST (bst, cost): 
@@ -102,41 +103,99 @@ def findInBST (bst, cost):
 
     return search(bst.root, cost)
 
+def search_max(node):
+    if node.right == None:
+        return node
+    else:
+        return search_max(node.right)
+
 def findMaxPrice (bst):
     # This function returns the Phone with maximum price amongst all phones available in the store.
 
-    def search(node):
-        if node.right == None:
-            return node.item
-        else:
-            return search(node.right)
-
     if bst.root == None:
+        print("No records in BST")
         return None
 
-    return search(bst.root)
+    return search_max(bst.root).item
+
+def search_min(node):
+    if node.left == None:
+        return node
+    else:
+        return search_min(node.left)
 
 def findMinPrice (bst):
     # This function returns the Phone with minimum price amongst all phones available in the store.
 
-    def search(node):
-        if node.left == None:
-            return node.item
-        else:
-            return search(node.left)
-
     if bst.root == None:
+        print("No records in BST")
         return None
 
-    return search(bst.root)
+    return search_min(bst.root).item
 
 def findSecondMaxPrice (bst):
     # This function returns the Phone with second highest price amongst all phones available in the store.
-    pass
+    if bst.root == None:
+        print("No records in BST")
+        return None
+
+    if bst.root.right == None and bst.root.left == None:
+        # Only one node in this BST. No second largest price.
+        print("Only one record is found in the BST, hence second costliest is None")
+        return None
+
+    # At this point, BST definitely has more than one phone record
+    # Second max element is in left sub tree
+    if bst.root.right == None:
+        return search_max(bst.root.left).item
+    
+    # Second max element may be root or on right sub tree of root
+    if bst.root.right != None:
+        first_largest = bst.root.right
+        second_largest = bst.root
+
+        # Traverse till the last right subtree and get largest and second largest nodes in the right links
+        while(first_largest.right != None):
+            second_largest = first_largest
+            first_largest = first_largest.right
+
+        # If the largest element has left subtree, then the second largest element will be the largest element in left subtree
+        if first_largest.left != None:
+            second_largest = search_max(first_largest.left)
+
+    return second_largest.item
 
 def findSecondMinPrice (bst) :
     # This function returns the Phone with second lowest price amongst all phones available in the store.
-    pass
+    if bst.root == None:
+        print("No records in BST")
+        return None
+
+    if bst.root.right == None and bst.root.left == None:
+        # Only one node in this BST. No second lowest price.
+        print("Only one record is found in the BST, hence second cheapest phone is None")
+        return None
+
+    # At this point, BST definitely has more than one phone record
+    # Second min element is in right sub tree
+    if bst.root.left == None:
+        return search_min(bst.root.right).item
+    
+    # Second min element may be root or on left sub tree of root
+    if bst.root.left != None:
+        first_lowest = bst.root.left
+        second_lowest = bst.root
+
+        # Traverse till the last left subtree and get lowest and second lowest nodes in the left links
+        while(first_lowest.left != None):
+            second_lowest = first_lowest
+            first_lowest = first_lowest.left
+
+        # If the lowest element has right subtree, then the second lowest element will be the lowest element in right subtree
+        if first_lowest.right != None:
+            second_lowest = search_min(first_lowest.right)
+
+    return second_lowest.item
 
 def listAllPrices (bst) :
     # Generate a linked list of prices of all Phones in increasing order, and return the same. You will have to implement all the required functionality of the Linked List data structure independently for this function. Once the Linked List is created, print it in the o/p file.
@@ -229,14 +288,12 @@ def command_prompt():
             phone = findMaxPrice(bst)
             print(phone)
         elif option == Input.FIND_SECOND_MAX.value:
-            # TODO:
             phone = findSecondMaxPrice(bst)
             print(phone)
         elif option == Input.FIND_MIN.value:
             phone = findMinPrice(bst)
             print(phone)
         elif option == Input.FIND_SECOND_MIN.value:
-            # TODO:
             phone = findSecondMinPrice(bst)
             print(phone)
         elif option == Input.DELETE_RECORD.value:
