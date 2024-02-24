@@ -153,6 +153,7 @@ def totalPhones (bst) :
 
 # Enum type of choices
 class Input(Enum):
+    RESTART = 0
     FILE_INPUT = 1
     COMMAND_INPUT = 2
     SEARCH_COST = 3
@@ -166,6 +167,7 @@ class Input(Enum):
 
 
 def get_input_from_user():
+    print(" 0. Restart Freshly")
     print(" 1. File Input")
     print(" 2. Command line Input")
     print(" 3. Search Cost")
@@ -190,8 +192,11 @@ def command_prompt():
         option = get_input_from_user()
 
         # TODO: Validate option
-
-        if option == Input.FILE_INPUT.value:
+        if option == Input.RESTART.value:
+            del(bst)
+            bst = createEmptyBST()
+            print("Operation successful")
+        elif option == Input.FILE_INPUT.value:
             filename = input("Enter the name of the file: ")
             f = open(filename, "r")
             no_of_entries = int(f.readline().rstrip('\n'))
