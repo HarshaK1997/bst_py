@@ -146,7 +146,7 @@ def deleteFromBST (bst, name, price) :
     # This function is responsible for deleting a Phone entry from the BST, having same name and price as {name} and {price} respectively.
     pass
 
-def totalBooks (bst) :
+def totalPhones (bst) :
     # This function should return a pair of integers, first being the total different types of Phones currently in the store, and the second integer being the total number of Phones currently in stock in the store i.e sum of quantity left in stock field of each Phone entry in the BST.
     pass
 
