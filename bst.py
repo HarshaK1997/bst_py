@@ -130,8 +130,12 @@ def findMinPrice (bst):
 
     return search(bst.root, bst.root.item.price)
 
-def findSecondMaxPrice (bst): #findSecondMinPrice (bst) :
+def findSecondMaxPrice (bst):
     # This function returns the Phone with second highest price amongst all phones available in the store.
+    pass
+
+def findSecondMinPrice (bst) :
+    # This function returns the Phone with second lowest price amongst all phones available in the store.
     pass
 
 def listAllPrices (bst) :
@@ -162,8 +166,10 @@ class Input(Enum):
     FIND_MIN = 6
     FIND_SECOND_MIN = 7
     DELETE_RECORD = 8
-    DISPLAY = 9
-    EXIT = 10
+    UPDATE_STOCK = 9
+    LIST_ALL_PRICE = 10
+    PHONE_TYPE_AND_STOCK_PAIR = 11
+    EXIT = 12
 
 
 def get_input_from_user():
@@ -176,8 +182,10 @@ def get_input_from_user():
     print(" 6. Find min Price")
     print(" 7. Find second min Price")
     print(" 8. Delete record")
-    print(" 9. Display record")
-    print("10. Exit")
+    print(" 9. Update stock")
+    print("10. List all the prices")
+    print("11. Display number of phone type and stock pair")
+    print("12. Exit")
     option = int(input("Enter your choice: "))
     return option
 
@@ -220,9 +228,27 @@ def command_prompt():
         elif option == Input.FIND_MAX.value:
             phone = findMaxPrice(bst)
             print(phone)
+        elif option == Input.FIND_SECOND_MAX.value:
+            phone = findSecondMaxPrice(bst)
+            print(phone)
         elif option == Input.FIND_MIN.value:
             phone = findMinPrice(bst)
             print(phone)
+        elif option == Input.FIND_SECOND_MIN.value:
+            phone = findSecondMinPrice(bst)
+            print(phone)
+        elif option == Input.DELETE_RECORD.value:
+            # TODO: deleteFromBST(bst, name, price)
+            pass
+        elif option == Input.UPDATE_STOCK.value:
+            # TODO: modifyQtyInStock(bst, name, price, new_qty)
+            pass
+        elif option == Input.LIST_ALL_PRICE.value:
+            # TODO: listAllPrices(bst)
+            pass
+        elif option == Input.PHONE_TYPE_AND_STOCK_PAIR.value:
+            # TODO: totalPhones(bst)
+            pass
         elif option == Input.EXIT.value:
             return
 
