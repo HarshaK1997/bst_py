@@ -105,30 +105,30 @@ def findInBST (bst, cost):
 def findMaxPrice (bst):
     # This function returns the Phone with maximum price amongst all phones available in the store.
 
-    def search(node, key):
+    def search(node):
         if node.right == None:
             return node.item
         else:
-            return search(node.right, key)
+            return search(node.right)
 
     if bst.root == None:
         return None
 
-    return search(bst.root, bst.root.item.price)
+    return search(bst.root)
 
 def findMinPrice (bst):
     # This function returns the Phone with minimum price amongst all phones available in the store.
 
-    def search(node, key):
+    def search(node):
         if node.left == None:
             return node.item
         else:
-            return search(node.left, key)
+            return search(node.left)
 
     if bst.root == None:
         return None
 
-    return search(bst.root, bst.root.item.price)
+    return search(bst.root)
 
 def findSecondMaxPrice (bst):
     # This function returns the Phone with second highest price amongst all phones available in the store.
@@ -229,12 +229,14 @@ def command_prompt():
             phone = findMaxPrice(bst)
             print(phone)
         elif option == Input.FIND_SECOND_MAX.value:
+            # TODO:
             phone = findSecondMaxPrice(bst)
             print(phone)
         elif option == Input.FIND_MIN.value:
             phone = findMinPrice(bst)
             print(phone)
         elif option == Input.FIND_SECOND_MIN.value:
+            # TODO:
             phone = findSecondMinPrice(bst)
             print(phone)
         elif option == Input.DELETE_RECORD.value:
