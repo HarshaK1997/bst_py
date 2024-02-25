@@ -197,9 +197,42 @@ def findSecondMinPrice (bst) :
 
     return second_lowest.item
 
+class ListNode:
+    def __init__(self, value):
+        self.value = value   # price
+        self.next = None
+
+def sortedListFromBST(root):
+    # Helper function for in-order traversal
+    def inorder_traversal(node):
+        nonlocal prev, head
+        if node:
+            inorder_traversal(node.left)
+            # Create a new ListNode for the current node's value
+            new_node = ListNode(node.item.price)
+            if not head:
+                head = new_node
+            else:
+                prev.next = new_node
+            prev = new_node
+            inorder_traversal(node.right)
+
+    head = None  # head of the linked list
+    prev = None  # pointer to the previous node
+
+    inorder_traversal(root)
+
+    return head
+
 def listAllPrices (bst) :
     # Generate a linked list of prices of all Phones in increasing order, and return the same. You will have to implement all the required functionality of the Linked List data structure independently for this function. Once the Linked List is created, print it in the o/p file.
-    pass
+    # Get the sorted linked list from the BST
+    sorted_list_head = sortedListFromBST(bst.root)
+    # Print the sorted linked list
+    current = sorted_list_head
+    while current:
+        print(current.value)
+        current = current.next
 
 def modifyQtyInStock (bst, name, price, new_qty) :
     # Using this function, you should find the entry in the BST {bst} having {name} and {price} and set its quantity left in stock field to new_qty.
@@ -358,7 +391,7 @@ def command_prompt():
             # TODO: modifyQtyInStock(bst, name, price, new_qty)
             pass
         elif option == Input.LIST_ALL_PRICE.value:
-            # TODO: listAllPrices(bst)
+            listAllPrices(bst)
             pass
         elif option == Input.PHONE_TYPE_AND_STOCK_PAIR.value:
             count, quantity = totalPhones (bst)
