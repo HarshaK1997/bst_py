@@ -253,6 +253,7 @@ def totalPhones (bst) :
 
     # This function should return a pair of integers, first being the total different types of Phones currently in the store, and the second integer being the total number of Phones currently in stock in the store i.e sum of quantity left in stock field of each Phone entry in the BST.
     def total_count_qty(node):
+       
 
         if node is None:
             return 0, 0
@@ -352,8 +353,7 @@ def command_prompt():
             phone = deleteFromBST (bst, name, cost)
             print("Deleted phone details")
             print(phone)
-            # TODO: deleteFromBST(bst, name, price)
-            pass
+
         elif option == Input.UPDATE_STOCK.value:
             # TODO: modifyQtyInStock(bst, name, price, new_qty)
             pass
@@ -363,7 +363,6 @@ def command_prompt():
         elif option == Input.PHONE_TYPE_AND_STOCK_PAIR.value:
             count, quantity = totalPhones (bst)
             print("Phone count and quantity is \n",count, quantity)
-            pass
         elif option == Input.EXIT.value:
             return
 
