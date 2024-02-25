@@ -207,7 +207,47 @@ def modifyQtyInStock (bst, name, price, new_qty) :
 
 def deleteFromBST (bst, name, price) :
     # This function is responsible for deleting a Phone entry from the BST, having same name and price as {name} and {price} respectively.
-    pass
+    #TO DO need to be tested
+
+    def delete(node, name, price, success=True):
+        if node is None:
+            print("Node is not found in the BST")
+            return node, False
+        
+        if price < node.item.price:                                 #Check if price is less than current node price
+            node.left = delete(node.left, name, price)              #call recursively to delete the node from left sub tree
+
+        elif price > node.item.price:                               #Check if price is greater than current node price
+            node.right = delete(node.right, name, price)            #call recursively to delete the node from right sub tree
+
+        else:
+            if node.left is None:                                   #Check if node has no left child
+                current = node                                #Assign current node to right child
+                node = None                                         #delete the node                      
+                return current, success
+            
+            elif node.right is None:                                #Check if node has no right child
+                current = node                               #Assign current node to left child
+                node = None                                         #delete the node
+                return current, success
+            else:
+                current = findminnode(node.right)                   #find the min value from left sub tree to be replaced
+                node.item = current.item                            # replaced the min value from right sub tree
+                node.right = delete(node.right, current.item.name, current.item.price)   #delete the min value node from right sub tree
+        return node, success
+            
+    def findminnode(node):                                         
+        current = node                                              #find the min node from the right subtree
+        while current.left:                                          #check until there is no left node
+            current = current.left                                   #fetches the min node     
+        return current
+        
+    node, success = delete(bst.root, name, price)
+    if success:
+        bst.no_of_phones -= 1
+    return node
+
+    
 
 def totalPhones (bst) :
     # This function should return a pair of integers, first being the total different types of Phones currently in the store, and the second integer being the total number of Phones currently in stock in the store i.e sum of quantity left in stock field of each Phone entry in the BST.
@@ -297,6 +337,11 @@ def command_prompt():
             phone = findSecondMinPrice(bst)
             print(phone)
         elif option == Input.DELETE_RECORD.value:
+            name = input("Enter the name of the phone to be deleted ")
+            cost = int(input("Enter the cost pf the phone to be deleted "))
+            phone = deleteFromBST (bst, name, cost)
+            print("Deleted phone details")
+            print(phone)
             # TODO: deleteFromBST(bst, name, price)
             pass
         elif option == Input.UPDATE_STOCK.value:
