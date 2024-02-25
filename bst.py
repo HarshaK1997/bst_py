@@ -250,10 +250,21 @@ def deleteFromBST (bst, name, price) :
     
 
 def totalPhones (bst) :
+
     # This function should return a pair of integers, first being the total different types of Phones currently in the store, and the second integer being the total number of Phones currently in stock in the store i.e sum of quantity left in stock field of each Phone entry in the BST.
-    pass
+    def total_count_qty(node):
 
-
+        if node is None:
+            print("BST is empty")
+            return 0, 0
+        left_tree_count , left_tree_quantity = total_count_qty(node.left)
+        right_tree_count , right_tree_quantity = total_count_qty(node.right)
+        cnt = left_tree_count + right_tree_count + 1
+        qty = left_tree_quantity + right_tree_quantity + node.item.quantity
+        return cnt, qty
+    
+    count, quantity = total_count_qty(bst.root)
+    return count, quantity
 # Enum type of choices
 class Input(Enum):
     RESTART = 0
@@ -351,7 +362,8 @@ def command_prompt():
             # TODO: listAllPrices(bst)
             pass
         elif option == Input.PHONE_TYPE_AND_STOCK_PAIR.value:
-            # TODO: totalPhones(bst)
+            count, quantity = totalPhones (bst)
+            print("Phone count and quantity is \n",count, quantity)
             pass
         elif option == Input.EXIT.value:
             return
