@@ -255,7 +255,6 @@ def totalPhones (bst) :
     def total_count_qty(node):
 
         if node is None:
-            print("BST is empty")
             return 0, 0
         left_tree_count , left_tree_quantity = total_count_qty(node.left)
         right_tree_count , right_tree_quantity = total_count_qty(node.right)
