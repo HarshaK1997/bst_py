@@ -344,13 +344,14 @@ def get_input_from_user():
 def command_prompt():
     # Get the choice from user
 
+    # Initially, empty BST instance is created
     bst = createEmptyBST()
 
     while (True):
-        # Loop till the user enters valid input               
+        # TODO: (Optional) Loop till the user enters valid input               
         option = get_input_from_user()
 
-        # TODO: Validate option
+        # TODO: (Optional) Validate option
         if option == Input.RESTART.value:
             del(bst)
             bst = createEmptyBST()
