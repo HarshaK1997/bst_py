@@ -1,4 +1,6 @@
-# Assumption: No two Phones have the same price in our store. => Key is Phone's price
+# Main Assumption: No two Phones have the same price in our store. => Key is Phone's price.
+# Please find other Assumptions on SFS: Assumptions section.
+
 from enum import Enum
 
 class BST:
@@ -45,10 +47,12 @@ def insertIntoBST (bst, phone):
 
     def insert (node, key_node, success=True):
         if node == None:
+            # If BST is empty, given node becomes root.
             return key_node, success
 
         if node.item.price == key_node.item.price:
-            print("Duplicate")
+            # Duplicate record check
+            # As per our Assumption, name and price pair is unique, hence no separate check for name
             return node, False
         elif node.item.price < key_node.item.price:
             # If phone's price is less than current nodes price: Insert the node at right subtree
@@ -65,15 +69,17 @@ def insertIntoBST (bst, phone):
 
         return node, success
 
+    # Create a node to add it in BST
     key_node = Node()
     key_node.item = phone
 
     bst.root, success = insert(bst.root, key_node)
 
+    # Don't update phone count for duplicate record.
     if success:
         bst.no_of_phones += 1
 
-    return bst
+    return bst, success
 
 def findInBST (bst, cost): 
     # This function finds whether there exists a Phone of price {cost}, and if there does, return that Phone variable, if not, return null.
@@ -104,6 +110,7 @@ def findInBST (bst, cost):
     return search(bst.root, cost)
 
 def search_max(node):
+    # This function is used by findMaxPrice & findSecondMaxPrice functions
     if node.right == None:
         return node
     else:
@@ -119,6 +126,7 @@ def findMaxPrice (bst):
     return search_max(bst.root).item
 
 def search_min(node):
+    # This function is used by findMinPrice & findSecondMinPrice functions
     if node.left == None:
         return node
     else:
@@ -351,19 +359,26 @@ def command_prompt():
             filename = input("Enter the name of the file: ")
             f = open(filename, "r")
             no_of_entries = int(f.readline().rstrip('\n'))
+            unique = True
             for _ in range(no_of_entries):
                 item = f.readline().rstrip('\n').split(", ")
                 phone = Phone(item[0], int(item[1]), int(item[2]))
-                bst = insertIntoBST(bst, phone)
+                bst, success = insertIntoBST(bst, phone)
+                unique = unique and success
             f.close()
-            print("Insertion successful")
+            if not unique:
+                print("Duplicate records found, which are ignored.")
+            print("Insertion operation complete.")
         elif option == Input.COMMAND_INPUT.value:
             no_of_entries = int(input("Enter the number of entries: "))
             print("Enter the details is below format:\n<PHONE_NAME>, <PRICE>, <QUANTITY>")
             for _ in range(no_of_entries):
                 item = input("Enter the phone details: ").split(', ')
                 phone = Phone(item[0], int(item[1]), int(item[2]))
-                bst = insertIntoBST(bst, phone)
+                bst, success = insertIntoBST(bst, phone)
+                if not success:
+                    print("Duplicate records found, which are ignored.")
+            print("Insertion operation complete.")
         elif option == Input.SEARCH_COST.value:
             cost = int(input("Enter the phone price to search: "))
             phone = findInBST(bst, cost)
@@ -386,7 +401,6 @@ def command_prompt():
             phone = deleteFromBST (bst, name, cost)
             print("Deleted phone details")
             print(phone)
-
         elif option == Input.UPDATE_STOCK.value:
             # TODO: modifyQtyInStock(bst, name, price, new_qty)
             pass
@@ -398,7 +412,14 @@ def command_prompt():
             print("Phone count and quantity is \n",count, quantity)
         elif option == Input.EXIT.value:
             return
+        else:
+            print("Please enter the valid option")
 
 
-if __name__ == "__main__": 
-    command_prompt()
+if __name__ == "__main__":
+    try:
+        command_prompt()
+    except Exception as error_message:
+        print("\nFound error: ", error_message)
+    
+    print("\nThank you...\nProgram terminated successfully...")
