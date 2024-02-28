@@ -205,6 +205,16 @@ def findSecondMinPrice (bst) :
 
     return second_lowest.item
 
+
+def printAllPhoneDetails(bst) :
+    # Inorder triversal to print the BST
+    def inorder_traversal(root):
+        if root:
+            inorder_traversal(root.left)
+            print(root.item)
+            inorder_traversal(root.right)
+    inorder_traversal(bst.root)
+
 class ListNode:
     def __init__(self, value):
         self.value = value   # price
@@ -229,7 +239,6 @@ def sortedListFromBST(root):
     prev = None  # pointer to the previous node
 
     inorder_traversal(root)
-
     return head
 
 def listAllPrices (bst) :
@@ -244,7 +253,22 @@ def listAllPrices (bst) :
 
 def modifyQtyInStock (bst, name, price, new_qty) :
     # Using this function, you should find the entry in the BST {bst} having {name} and {price} and set its quantity left in stock field to new_qty.
-    pass
+    def find_and_modify(node):
+        if not node:
+            return False
+        if (node.item.name == name) and (node.item.price == price):
+            node.item.quantity = new_qty
+            return True
+        elif node.item.price < price :
+            return find_and_modify(node.right)
+        else:
+            return find_and_modify(node.left)
+
+    found = find_and_modify(bst.root)
+    if found:
+        print(f"Phone : {name}, Price: {price}, Quantity: {new_qty}")
+    else:
+        print(f"No phone found with name '{name}' and price '{price}'")
 
 def deleteFromBST (bst, name, price) :
     # This function is responsible for deleting a Phone entry from the BST, having same name and price as {name} and {price} respectively.
@@ -320,7 +344,8 @@ class Input(Enum):
     UPDATE_STOCK = 9
     LIST_ALL_PRICE = 10
     PHONE_TYPE_AND_STOCK_PAIR = 11
-    EXIT = 12
+    PRINT_ALL_PHONE = 12
+    EXIT = 13
 
 
 def get_input_from_user():
@@ -336,7 +361,8 @@ def get_input_from_user():
     print(" 9. Update stock")
     print("10. List all the prices")
     print("11. Display number of phone type and stock pair")
-    print("12. Exit")
+    print("12. Print All the phones details")
+    print("13. Exit")
     option = int(input("Enter your choice: "))
     return option
 
@@ -403,14 +429,19 @@ def command_prompt():
             print("Deleted phone details")
             print(phone)
         elif option == Input.UPDATE_STOCK.value:
-            # TODO: modifyQtyInStock(bst, name, price, new_qty)
-            pass
+            print("Update stock by entering the following information")
+            name = input("Enter the name of the phone : ")
+            price = int(input("Enter the cost : "))
+            new_qty = int(input("Enter the new quantity : "))
+            modifyQtyInStock(bst, name, price, new_qty)
         elif option == Input.LIST_ALL_PRICE.value:
             listAllPrices(bst)
-            pass
         elif option == Input.PHONE_TYPE_AND_STOCK_PAIR.value:
             count, quantity = totalPhones (bst)
             print("Phone count and quantity is \n",count, quantity)
+        elif option == Input.PRINT_ALL_PHONE.value:
+            print("Printing all phones details of the BST")
+            printAllPhoneDetails(bst)
         elif option == Input.EXIT.value:
             return
         else:
