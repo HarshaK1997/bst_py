@@ -245,6 +245,11 @@ def listAllPrices (bst) :
     # Generate a linked list of prices of all Phones in increasing order, and return the same. You will have to implement all the required functionality of the Linked List data structure independently for this function. Once the Linked List is created, print it in the o/p file.
     # Get the sorted linked list from the BST
     sorted_list_head = sortedListFromBST(bst.root)
+
+    if sorted_list_head:
+        print("BST is empty")
+        return
+
     # Print the sorted linked list
     current = sorted_list_head
     while current:
@@ -272,7 +277,6 @@ def modifyQtyInStock (bst, name, price, new_qty) :
 
 def deleteFromBST (bst, name, price) :
     # This function is responsible for deleting a Phone entry from the BST, having same name and price as {name} and {price} respectively.
-    #TO DO need to be tested
 
     def delete(node, name, price, success=True):
         if node is None:
@@ -286,6 +290,7 @@ def deleteFromBST (bst, name, price) :
             node.right = delete(node.right, name, price)            #call recursively to delete the node from right sub tree
 
         else:
+            # Left node is None, or both are None
             if node.left is None:                                   #Check if node has no left child
                 current = node                                #Assign current node to right child
                 node = None                                         #delete the node                      
@@ -310,7 +315,7 @@ def deleteFromBST (bst, name, price) :
     node, success = delete(bst.root, name, price)
     if success:
         bst.no_of_phones -= 1
-    return node
+        return node.item
 
     
 
@@ -374,10 +379,18 @@ def command_prompt():
     bst = createEmptyBST()
 
     while (True):
-        # TODO: (Optional) Loop till the user enters valid input               
-        option = get_input_from_user()
+        # Handling invalid inputs
+        success = True
+        try:
+            option = get_input_from_user()
+        except Exception as error_message:
+            print("ERROR: ", error_message)
+            print("Please enter an integer value")
+            success = False
 
-        # TODO: (Optional) Validate option
+        if success == False:
+            continue
+
         if option == Input.RESTART.value:
             del(bst)
             bst = createEmptyBST()
@@ -409,25 +422,32 @@ def command_prompt():
         elif option == Input.SEARCH_COST.value:
             cost = int(input("Enter the phone price to search: "))
             phone = findInBST(bst, cost)
-            print(phone)
+            if not phone:
+                print("Record not found")
+            else:
+                print(phone)
         elif option == Input.FIND_MAX.value:
             phone = findMaxPrice(bst)
-            print(phone)
+            if phone:
+                print(phone)
         elif option == Input.FIND_SECOND_MAX.value:
             phone = findSecondMaxPrice(bst)
-            print(phone)
+            if phone:
+                print(phone)
         elif option == Input.FIND_MIN.value:
             phone = findMinPrice(bst)
-            print(phone)
+            if phone:
+                print(phone)
         elif option == Input.FIND_SECOND_MIN.value:
             phone = findSecondMinPrice(bst)
-            print(phone)
+            if phone:
+                print(phone)
         elif option == Input.DELETE_RECORD.value:
-            name = input("Enter the name of the phone to be deleted ")
-            cost = int(input("Enter the cost pf the phone to be deleted "))
-            phone = deleteFromBST (bst, name, cost)
-            print("Deleted phone details")
-            print(phone)
+            name = input("Enter the name of the phone to be deleted: ")
+            cost = int(input("Enter the cost of the phone to be deleted: "))
+            phone = deleteFromBST(bst, name, cost)
+            if not phone:
+                print(phone)
         elif option == Input.UPDATE_STOCK.value:
             print("Update stock by entering the following information")
             name = input("Enter the name of the phone : ")
@@ -453,5 +473,7 @@ if __name__ == "__main__":
         command_prompt()
     except Exception as error_message:
         print("\nFound error: ", error_message)
+        print("Your previous contents are flushed...\nRestarting...")
+        command_prompt()
     
     print("\nThank you...\nProgram terminated successfully...")
