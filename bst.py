@@ -241,14 +241,16 @@ def sortedListFromBST(root):
 
     head = None  # head of the linked list
     prev = None  # pointer to the previous node
-
     inorder_traversal(root)
     return head
 
 # write output to a file
 def write_to_file(filename, data):
-    with open(filename, 'w') as file:
+    file = open(filename, 'w')
+    try:
         file.write(data)
+    finally:
+        file.close()
 
 def listAllPrices (bst) :
     # Generate a linked list of prices of all Phones in increasing order, and return the same. You will have to implement all the required functionality of the Linked List data structure independently for this function. Once the Linked List is created, print it in the o/p file.
@@ -261,7 +263,7 @@ def listAllPrices (bst) :
     # Check if output file already exists
     output_file = input("Enter filename as *.txt, to save prices :\n")
     if os.path.exists(output_file):
-        print(f"Error: {output_file} already exists.")
+        print(f"{output_file} already exists.")
         option = input("Do you want to overright the file: y/n\n").lower()
         if option != "y" :
             return
@@ -373,6 +375,7 @@ class Input(Enum):
 
 
 def get_input_from_user():
+    print("\n")
     print(" 0. Restart Freshly")
     print(" 1. File Input")
     print(" 2. Command line Input")
