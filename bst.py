@@ -2,6 +2,7 @@
 # Please find other Assumptions on SFS: Assumptions section.
 
 from enum import Enum
+import os
 
 class BST:
     # Binary Search Tree
@@ -207,6 +208,9 @@ def findSecondMinPrice (bst) :
 
 
 def printAllPhoneDetails(bst) :
+    if bst.root  is None:
+        print("BST is  empty")
+        return
     # Inorder triversal to print the BST
     def inorder_traversal(root):
         if root:
@@ -241,20 +245,35 @@ def sortedListFromBST(root):
     inorder_traversal(root)
     return head
 
+# write output to a file
+def write_to_file(filename, data):
+    with open(filename, 'w') as file:
+        file.write(data)
+
 def listAllPrices (bst) :
     # Generate a linked list of prices of all Phones in increasing order, and return the same. You will have to implement all the required functionality of the Linked List data structure independently for this function. Once the Linked List is created, print it in the o/p file.
     # Get the sorted linked list from the BST
+    if bst.root  is None:
+        print("BST is  empty")
+        return
     sorted_list_head = sortedListFromBST(bst.root)
 
-    if sorted_list_head:
-        print("BST is empty")
-        return
+    # Check if output file already exists
+    output_file = input("Enter filename as *.txt, to save prices :\n")
+    if os.path.exists(output_file):
+        print(f"Error: {output_file} already exists.")
+        option = input("Do you want to overright the file: y/n\n").lower()
+        if option != "y" :
+            return
 
+    output_data = ""
     # Print the sorted linked list
     current = sorted_list_head
     while current:
-        print(current.value)
+        output_data += str(current.value) + '\n'
         current = current.next
+    # Write the output to the file
+    write_to_file(output_file, output_data)
 
 def modifyQtyInStock (bst, name, price, new_qty) :
     # Using this function, you should find the entry in the BST {bst} having {name} and {price} and set its quantity left in stock field to new_qty.
