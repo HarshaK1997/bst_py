@@ -1,6 +1,3 @@
-# Main Assumption: No two Phones have the same price in our store. => Key is Phone's price.
-# Please find other Assumptions on SFS: Assumptions section.
-
 from enum import Enum
 import os
 
